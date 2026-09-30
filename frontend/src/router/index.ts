@@ -21,6 +21,8 @@ const Waterbody = () => import('@/views/waterbody/index.vue')
 const Code = () => import('@/views/code/index.vue')
 const Complaint = () => import('@/views/complaint/index.vue')
 const Seasonplan = () => import('@/views/seasonplan/index.vue')
+const Lighting = () => import('@/views/lighting/index.vue')
+const LightingMonitor = () => import('@/views/lightingmonitor/index.vue')
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,6 +48,8 @@ const router = createRouter({
     { path: '/code', name: 'code', component: Code },
     { path: '/complaint', name: 'complaint', component: Complaint },
     { path: '/seasonplan', name: 'seasonplan', component: Seasonplan },
+    { path: '/lighting', name: 'lighting', component: Lighting },
+    { path: '/lighting-monitor', name: 'lighting-monitor', component: LightingMonitor },
   ],
 })
 

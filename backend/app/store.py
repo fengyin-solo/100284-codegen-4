@@ -8,15 +8,24 @@ from typing import Any
 
 from app.seed import SEED_ROWS
 
+# 景观照明使用自己的一套领域表，不进通用 CRUD 看板统计。
+_HIDDEN_TABLE_PREFIXES = ("lighting_",)
+
+
+def _is_hidden(name: str) -> bool:
+    return name.startswith(_HIDDEN_TABLE_PREFIXES)
+
 
 class Store:
     def __init__(self) -> None:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        self._meta: dict[str, Any] = {}
+        # 景观照明等领域模块的示例数据由 main 启动后引导注入，避免与 services 层循环导入。
 
     def module_names(self) -> list[str]:
-        return sorted(self._tables)
+        return sorted(name for name in self._tables if not _is_hidden(name))
 
     def rows(self, module: str) -> list[dict[str, Any]]:
         return self._tables.setdefault(module, [])
@@ -26,6 +35,12 @@ class Store:
             if int(row.get("id", 0)) == entry_id:
                 return row
         return None
+
+    def get_meta(self, key: str, default: Any = None) -> Any:
+        return self._meta.get(key, default)
+
+    def set_meta(self, key: str, value: Any) -> None:
+        self._meta[key] = value
 
     def overview(self) -> dict[str, object]:
         modules: list[dict[str, object]] = []

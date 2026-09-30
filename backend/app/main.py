@@ -10,9 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import ROUTERS
+from app.services.lighting import ensure_seed as ensure_lighting_seed
 from app.store import store
 
 app = FastAPI(title="园林绿化养护管理平台", version="1.0.0")
+
+# 引导注入景观照明示例台账、初始亮灯排程与电流告警（幂等）。
+ensure_lighting_seed()
 
 app.add_middleware(
     CORSMiddleware,
